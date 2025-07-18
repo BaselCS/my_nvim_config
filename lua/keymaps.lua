@@ -1,5 +1,7 @@
 -- keymaps for vim
 vim.g.mapleader = " "
+-- stop Space from working in n and v
+vim.api.nvim_set_keymap('', '<Space>', '<Nop>', { noremap = true, silent = true })
 
 -- Paste in visual mode without yanking replaced text
 vim.keymap.set("x", "p", [["_dP]])
@@ -35,6 +37,8 @@ vim.keymap.set("n","<Enter>","o<Esc>")
 
 
 
+-- run python code by F5
+vim.api.nvim_set_keymap('n', '<F5>', ':w<CR>:!python3 %<CR>', { noremap = true, silent = true })
 
 
 

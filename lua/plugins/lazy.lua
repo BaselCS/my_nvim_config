@@ -101,34 +101,28 @@ end
 
 
 --lsp
-    { 'mfussenegger/nvim-lint', },
-    { "neovim/nvim-lspconfig" },
-    { "williamboman/mason.nvim" },
-    { "williamboman/mason-lspconfig.nvim" },
-    {
-        'mfussenegger/nvim-dap',
-        dependencies = {
-            'jay-babu/mason-nvim-dap.nvim',
-            "rcarriga/nvim-dap-ui",
-            "nvim-neotest/nvim-nio"
-        }
+{
+    "neovim/nvim-lspconfig",
+    dependencies = {
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
     },
-    {
-        "hrsh7th/nvim-cmp",
-        dependencies = {
-            'hrsh7th/cmp-nvim-lsp',
-            'hrsh7th/cmp-buffer',
-            'hrsh7th/cmp-path',
-            'hrsh7th/cmp-cmdline',
-            'L3MON4D3/LuaSnip',
-            'saadparwaiz1/cmp_luasnip',
-            'hrsh7th/cmp-vsnip',
-            'hrsh7th/vim-vsnip',
-            'rafamadriz/friendly-snippets',
-        }},
-        { 'mhartington/formatter.nvim' },
+    config = function()
+      require("plugins.lsp.lsp_setting")
+    end
+  },
+-- auto complete
+  {
+    "hrsh7th/nvim-cmp",
+    dependencies = { "hrsh7th/cmp-nvim-lsp" },
+    config = function()
+      require("plugins.lsp.cmp_settings")
+    end
+  },
 
-    --autoSave and format
+
+
+--autoSave and format
     {
   "Pocco81/auto-save.nvim",
   config = function()
