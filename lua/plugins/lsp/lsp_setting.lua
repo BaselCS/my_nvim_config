@@ -10,10 +10,11 @@ end
 
 require("mason").setup()
 require("mason-lspconfig").setup({
-  ensure_installed = { "pyright" },
+  ensure_installed = { "pyright" ,"lua_ls"}, --lan name
 automatic_installation = true,
 })
 
+-- Pthon lsp
 lspconfig.pyright.setup({
   on_attach = on_attach,
   settings = {
@@ -23,5 +24,30 @@ lspconfig.pyright.setup({
       }
     }
   }
+})
+
+-- Lua LSP
+lspconfig.lua_ls.setup({
+  on_attach = on_attach,
+  settings = {
+    Lua = {
+      runtime = {
+        -- Tell the language server which version of Lua you're using
+        version = 'LuaJIT',
+      },
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = {'vim'},
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file("", true),
+        checkThirdParty = false, -- Disable third-party checking
+      },
+      telemetry = {
+        enable = false,
+      },
+    },
+  },
 })
 

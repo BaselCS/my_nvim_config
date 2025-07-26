@@ -8,6 +8,7 @@ vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true -- convert tabs to spaces
+vim.opt.autoindent = true -- auto indentation
 vim.opt.smartindent=true
 vim.opt.wrap=true
 
@@ -20,8 +21,6 @@ vim.opt.updatetime=50
 vim.opt.colorcolumn="80"
 
 
-
-vim.opt.autoindent = true -- auto indentation
 vim.opt.list = true -- show tab characters and trailing whitespace
 vim.opt.formatoptions:remove("t") -- no auto-intent of line breaks, keep line wrap enabled
 
@@ -32,6 +31,7 @@ vim.opt.smartcase = true -- unless capital letter in search
 
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir" -- set directory where undo files are stored
 vim.opt.undofile = true -- save undo history to a file
+
 
 
 vim.opt.hlsearch = false -- do not highlight all matches on previous search pattern
