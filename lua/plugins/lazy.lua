@@ -57,8 +57,6 @@ require("lazy").setup({
         end
     },
 
-
-
     --  Telescope (fuzzy finder)
     {
         'nvim-telescope/telescope.nvim', tag = '0.1.8',
@@ -102,7 +100,6 @@ require("lazy").setup({
     cmd = "UndotreeToggle", -- Load when the command is first used
 },
 
-
     -- dashbord
     {
         'nvimdev/dashboard-nvim',
@@ -118,7 +115,6 @@ require("lazy").setup({
     -- airline {the mode file name ..etc bar}
     { 'vim-airline/vim-airline',
 },
-
 
 --lsp
 {
@@ -141,50 +137,6 @@ require("lazy").setup({
 },
 
 
-
---autoSave and format
-{
-    "Pocco81/auto-save.nvim",
-    config = function()
-        require("auto-save").setup {
-            enabled = true,
-            execution_message = {
-                message = function() return "AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S") end,
-                dim = 0.18,
-                cleaning_interval = 1250,
-            },
-            trigger_events = {"InsertLeave", "TextChanged"},
-            write_all_buffers = false,  -- Don't force-write all buffers
-            noautocmd = false,          -- Allow undo to work properly
-            debounce_delay = 2000,      -- Wait 2s after typing before saving
-            condition = function(buf)
-                local fn = vim.fn
-                local utils = require("auto-save.utils.data")
-
-                return fn.getbufvar(buf, "&modifiable") == 1
-                and utils.not_in(fn.getbufvar(buf, "&filetype"), {}) -- يمكنك وضع استثناءات هنا
-            end,
-
-            -- هنا نضيف التنسيق قبل الحفظ
-            callbacks = {
-                before_saving = function()
-                    local ok, _ = pcall(function()
-                        -- استخدام LSP format إن وجد
-                        if vim.lsp.buf.format then
-                            vim.lsp.buf.format({ async = false })
-                        else
-                            vim.cmd("normal! gg=G") -- تنسيق تقليدي
-                        end
-                    end)
-                end,
-            },
-        }
-    end,
-},
-
-
-
-
 -- Error Lens - shows diagnostics inline like VS Code
 {
     "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
@@ -203,7 +155,6 @@ require("lazy").setup({
     opts = {}, -- for default options, refer to the configuration section for custom setup.
     cmd = "Trouble",
 },
-
 
 -- Debug Adapter Protocol (DAP)
 {
@@ -294,5 +245,7 @@ require("lazy").setup({
 },
 
 })
+
+
 
 
