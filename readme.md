@@ -1,6 +1,6 @@
 تخصيص Vim لكي يعمل مع بايقون و  uv بأفشل شكل ممكن
 
-قائمة الاختصارات المخصصة :
+قائمة الاختصارات المخصصة (الترجمة آلية ) :
 # ملخص شامل لاختصارات Neovim
 
 **مفتاح القائد:** `<Space>` (مسطرة المسافة)
@@ -54,6 +54,8 @@
 |---------|------|--------|-------|
 | `<leader>ff` | عادي | `:Telescope find_files<cr>` | البحث عن الملفات |
 | `<leader>fp` | عادي | `:Telescope git_files<cr>` | البحث في ملفات git |
+| `<leader>F` | عادي | `:Telescope live_grep<cr>` | البحث النصي المباشر |
+| `<leader>gd` | عادي | `:Telescope lsp_definitions<cr>` | البحث عن التعريفات باستخدام LSP |
 | `<leader>e` | عادي | `:NvimTreeFindFileToggle<cr>` | تبديل شجرة الملفات |
 
 ## تحرير الكود والتعليقات
@@ -67,7 +69,6 @@
 
 | الاختصار | الوضع | الإجراء | الوصف |
 |---------|------|--------|-------|
-| `gd` | عادي | `vim.lsp.buf.definition` | الذهاب للتعريف |
 | `K` | عادي | `vim.lsp.buf.hover` | إظهار التوثيق المنبثق |
 | `<leader>rn` | عادي | `vim.lsp.buf.rename` | إعادة تسمية الرمز |
 | `<leader>ca` | عادي | `vim.lsp.buf.code_action` | إجراءات الكود |
@@ -84,7 +85,7 @@
 | `<leader>xL` | عادي | `Trouble loclist toggle` | قائمة المواقع (Trouble) |
 | `<leader>xQ` | عادي | `Trouble qflist toggle` | قائمة الإصلاح السريع (Trouble) |
 
-## DAP (بروتوكول محول التصحيح)
+## DAP (بروتوكول محول التصحيح) - التصحيح العام
 
 | الاختصار | الوضع | الإجراء | الوصف |
 |---------|------|--------|-------|
@@ -98,6 +99,23 @@
 | `<leader><F8>` | عادي | `DapTerminate` | إنهاء التصحيح |
 | `<leader><F9>` | عادي | `require('dapui').toggle()` | تبديل واجهة التصحيح |
 | `<leader><F10>` | عادي | `require('dapui').eval()` | تقييم التعبير |
+
+## DAP - التصحيح الخاص بـ Python
+
+| الاختصار | الوضع | الإجراء | الوصف |
+|---------|------|--------|-------|
+| `<leader><F11>` | عادي | `require('dap-python').test_method()` | اختبار الدالة الحالية |
+| `<leader><F12>` | عادي | `require('dap-python').test_class()` | اختبار الفئة الحالية |
+
+## GitHub Copilot
+
+| الاختصار | الوضع | الإجراء | الوصف |
+|---------|------|--------|-------|
+| `<leader>ai` | عادي | `:Copilot toggle<CR>` | تبديل Copilot |
+| `<leader>aie` | عادي | `:Copilot enable<CR>` | تفعيل Copilot |
+| `<leader>aid` | عادي | `:Copilot disable<CR>` | تعطيل Copilot |
+| `<C-l>` | إدراج | `copilot#Accept("<CR>")` | قبول اقتراح Copilot |
+| `<C-]>` | إدراج | `<Plug>(copilot-dismiss)` | رفض اقتراح Copilot |
 | `<leader><F11>` | عادي | `require('dap-python').test_method()` | اختبار دالة Python |
 | `<leader><F12>` | عادي | `require('dap-python').test_class()` | اختبار فئة Python |
 
