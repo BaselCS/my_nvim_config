@@ -3,6 +3,9 @@
  -- telescope
 vim.keymap.set("n", "<leader>ff", ": Telescope find_files<cr>")
 vim.keymap.set("n", "<leader>fp", ": Telescope git_files<cr>")
+vim.keymap.set("n", "<leader>F", ": Telescope live_grep<cr>")
+vim.keymap.set("n", "<leader>gd", ": Telescope lsp_definitions<cr>")
+
 
 --nav tree
 vim.keymap.set("n", "<leader>e", ":NvimTreeFindFileToggle<cr>")
@@ -79,6 +82,19 @@ vim.keymap.set("n", "<leader><F12>", "<cmd>lua require('dap-python').test_class(
   { desc = "Test Class" })
 
 
+-- Copilot
+-- Toggle Copilot
+vim.keymap.set("n", "<leader>ai", ":Copilot toggle<CR>", { desc = "Toggle Copilot" })
+vim.keymap.set("n", "<leader>aie", ":Copilot enable<CR>", { desc = "Enable Copilot" })
+vim.keymap.set("n", "<leader>aid", ":Copilot disable<CR>", { desc = "Disable Copilot" })
+
+-- Suggestion Navigation (in Insert Mode)
+vim.keymap.set("i", "<C-l>", 'copilot#Accept("<CR>")', {
+  expr = true,
+  silent = true,
+  desc = "Accept Copilot Suggestion"
+})
+vim.keymap.set("i", "<C-]>", "<Plug>(copilot-dismiss)")
 
 
 

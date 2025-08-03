@@ -31,25 +31,43 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-    -- Theme
-    {
-        "catppuccin/nvim",
-        name = "catppuccin",
-        priority = 1000,
-        config = function()
-            require("catppuccin").setup({
-                flavour = "mocha",
-            })
-            vim.cmd.colorscheme("catppuccin")
-        end,
-    },
-    -- Treesitter { a way to speed up vim and ad indation
+      {
+    "ellisonleao/gruvbox.nvim",
+    priority = 1000, -- Make sure to load this before all other plugins
+    config = function()
+      vim.cmd.colorscheme("gruvbox")
+      -- Optional gruvbox configuration
+      require("gruvbox").setup({
+        undercurl = true,
+        underline = true,
+        bold = true,
+        italic = {
+          strings = true,
+          comments = true,
+          operators = false,
+          folds = true,
+        },
+        strikethrough = true,
+        invert_selection = false,
+        invert_signs = false,
+        invert_tabline = false,
+        invert_intend_guides = false,
+        inverse = true, -- invert background for search, diffs, statuslines and errors
+        contrast = "hard", -- can be "hard", "soft" or empty string
+        palette_overrides = {},
+        overrides = {},
+        dim_inactive = false,
+        transparent_mode = false,
+      })
+    end,
+  },
+    -- Treesitter { a way to speed up vim and add indation
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
         config = function()
             require("nvim-treesitter.configs").setup({
-                ensure_installed = { "lua", "cpp", "python" },
+                ensure_installed = { "lua", "cpp", "python","markdown", "markdown_inline",},
                 highlight = {
                     enable = true,
                 },
@@ -60,7 +78,11 @@ require("lazy").setup({
     --  Telescope (fuzzy finder)
     {
         'nvim-telescope/telescope.nvim', tag = '0.1.8',
-        dependencies = { 'nvim-lua/plenary.nvim' }
+        dependencies = {
+        'nvim-lua/plenary.nvim' ,
+     -- make tele fater
+        {'nvim-telescope/telescope-fzf-native.nvim',build='make'}
+        },
     },
 
     --  File tree
@@ -113,8 +135,7 @@ require("lazy").setup({
     },
 
     -- airline {the mode file name ..etc bar}
-    { 'vim-airline/vim-airline',
-},
+    { 'vim-airline/vim-airline'},
 
 --lsp
 {
@@ -210,6 +231,14 @@ require("lazy").setup({
         })
     end,
 },
+
+-- github copilot
+{
+  "github/copilot.vim",
+  event = "InsertEnter",
+},
+
+
 -- Auto-pairs plugin for better indentation and bracket handling
 {
   "windwp/nvim-autopairs",
