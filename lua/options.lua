@@ -12,9 +12,6 @@ vim.opt.autoindent = true -- auto indentation
 vim.opt.smartindent=true
 vim.opt.wrap=true
 
-vim.opt.swapfile=true
-vim.opt.backup=true
-vim.opt.undodir=os.getenv("HOME").."/.vim/undodir"
 
 -- Changed from 50 to 4000 (4 seconds) - less aggressive
 vim.opt.updatetime=4000
