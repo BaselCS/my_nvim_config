@@ -37,14 +37,22 @@ vim.opt.signcolumn = "yes" -- always show the sign column, to avoid text shiftin
 vim.opt.isfname:append("@-@") -- include '@' in the set of characters considered part of a file name
 
 -- Python formatting
+-- Python-specific indentation settings
 vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
   pattern = "*.py",
   callback = function()
-    vim.opt.textwidth = 79
-    vim.opt.colorcolumn = "79"
+    vim.opt_local.textwidth = 79
+    vim.opt_local.colorcolumn = "79"
+    -- Better Python indentation
+    vim.opt_local.smartindent = false  -- Disable smartindent for Python
+    vim.opt_local.autoindent = true    -- Keep autoindent
+    vim.opt_local.indentexpr = ""      -- Let filetype plugin handle it
+    -- Python-specific settings
+    vim.b.python_indent_close_paren = false
+    vim.b.python_indent_nested_paren = 4
+    vim.b.python_indent_continue = 4
   end
 })
-
 -- Clean trailing whitespace on save
 local CleanOnSave = vim.api.nvim_create_augroup('CleanOnSave', {})
 vim.api.nvim_create_autocmd({"BufWritePre"}, {

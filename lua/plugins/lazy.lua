@@ -3,16 +3,16 @@
 --  cmd = { "FloatermNew", "FloatermToggle" }, -- Load when these commands are runtime
 --
 --  keys = { -- Load when these keys are pressed
---              { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
---              { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live Grep" },
---         }
---
--- lazy = true, -- Don't load until explicitly called
---
--- module = "neodev", -- Load when `require("neodev")` is called
---
--- cmd = { "FloatermNew", "FloatermToggle" }, -- Load when these commands are run
---
+    --              { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
+    --              { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live Grep" },
+    --         }
+    --
+    -- lazy = true, -- Don't load until explicitly called
+    --
+    -- module = "neodev", -- Load when `require("neodev")` is called
+    --
+    -- cmd = { "FloatermNew", "FloatermToggle" }, -- Load when these commands are run
+    --
 
 
 
@@ -31,36 +31,36 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-      {
-    "ellisonleao/gruvbox.nvim",
-    priority = 1000, -- Make sure to load this before all other plugins
-    config = function()
-      vim.cmd.colorscheme("gruvbox")
-      -- Optional gruvbox configuration
-      require("gruvbox").setup({
-        undercurl = true,
-        underline = true,
-        bold = true,
-        italic = {
-          strings = true,
-          comments = true,
-          operators = false,
-          folds = true,
-        },
-        strikethrough = true,
-        invert_selection = false,
-        invert_signs = false,
-        invert_tabline = false,
-        invert_intend_guides = false,
-        inverse = true, -- invert background for search, diffs, statuslines and errors
-        contrast = "hard", -- can be "hard", "soft" or empty string
-        palette_overrides = {},
-        overrides = {},
-        dim_inactive = false,
-        transparent_mode = false,
-      })
-    end,
-  },
+    {
+        "ellisonleao/gruvbox.nvim",
+        priority = 1000, -- Make sure to load this before all other plugins
+        config = function()
+            vim.cmd.colorscheme("gruvbox")
+            -- Optional gruvbox configuration
+            require("gruvbox").setup({
+                undercurl = true,
+                underline = true,
+                bold = true,
+                italic = {
+                    strings = true,
+                    comments = true,
+                    operators = false,
+                    folds = true,
+                },
+                strikethrough = true,
+                invert_selection = false,
+                invert_signs = false,
+                invert_tabline = false,
+                invert_intend_guides = false,
+                inverse = true, -- invert background for search, diffs, statuslines and errors
+                contrast = "hard", -- can be "hard", "soft" or empty string
+                palette_overrides = {},
+                overrides = {},
+                dim_inactive = false,
+                transparent_mode = false,
+            })
+        end,
+    },
     -- Treesitter { a way to speed up vim and add indation
     {
         "nvim-treesitter/nvim-treesitter",
@@ -79,9 +79,9 @@ require("lazy").setup({
     {
         'nvim-telescope/telescope.nvim', tag = '0.1.8',
         dependencies = {
-        'nvim-lua/plenary.nvim' ,
-     -- make tele fater
-        {'nvim-telescope/telescope-fzf-native.nvim',build='make'}
+            'nvim-lua/plenary.nvim' ,
+            -- make tele fater
+            {'nvim-telescope/telescope-fzf-native.nvim',build='make'}
         },
     },
 
@@ -117,10 +117,10 @@ require("lazy").setup({
     },
 
     --  undo tree
-{
-    "mbbill/undotree",
-    cmd = "UndotreeToggle", -- Load when the command is first used
-},
+    {
+        "mbbill/undotree",
+        cmd = "UndotreeToggle", -- Load when the command is first used
+    },
 
     -- dashbord
     {
@@ -137,109 +137,108 @@ require("lazy").setup({
     -- airline {the mode file name ..etc bar}
     { 'vim-airline/vim-airline'},
 
---lsp
-{
-    "neovim/nvim-lspconfig",
-    dependencies = {
-        "williamboman/mason.nvim",
-        "williamboman/mason-lspconfig.nvim",
+    --lsp
+    {
+        "neovim/nvim-lspconfig",
+        dependencies = {
+            "williamboman/mason.nvim",
+            "williamboman/mason-lspconfig.nvim",
+        },
+        config = function()
+            require("plugins.lsp.lsp_setting")
+        end
     },
-    config = function()
-        require("plugins.lsp.lsp_setting")
-    end
-},
--- auto complete
-{
-    "hrsh7th/nvim-cmp",
-    dependencies = { "hrsh7th/cmp-nvim-lsp" },
-    config = function()
-        require("plugins.lsp.cmp_settings")
-    end
-},
-
-
--- Error Lens - shows diagnostics inline like VS Code
-{
-    "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-    config = function()
-        require("lsp_lines").setup()
-        -- Disable virtual_text since lsp_lines replaces it
-        vim.diagnostic.config({
-            virtual_text = false,
-        })
-    end,
-},
-
--- Trouble.nvim for diagnostics panel (xx)
-{
-    "folke/trouble.nvim",
-    opts = {}, -- for default options, refer to the configuration section for custom setup.
-    cmd = "Trouble",
-},
-
--- Debug Adapter Protocol (DAP)
-{
-    "mfussenegger/nvim-dap",
-    dependencies = {
-        -- Optional UI for better debugging experience
-        "rcarriga/nvim-dap-ui",
-        "nvim-neotest/nvim-nio",
-        -- Virtual text support
-        "theHamsta/nvim-dap-virtual-text",
-        -- Python debugger
-        "mfussenegger/nvim-dap-python",
+    -- auto complete
+    {
+        "hrsh7th/nvim-cmp",
+        dependencies = { "hrsh7th/cmp-nvim-lsp" },
+        config = function()
+            require("plugins.lsp.cmp_settings")
+        end
     },
-    config = function()
-        local dap = require("dap")
-        local dapui = require("dapui")
-
-        -- Setup DAP UI
-        dapui.setup()
-
-        -- Setup virtual text
-        require("nvim-dap-virtual-text").setup()
-
-        -- Python debugger setup - specify full path to Python
-        require("dap-python").setup("python3") -- Try python3 first
-        -- Alternative: specify full path if python3 doesn't work
-        -- require("dap-python").setup("/usr/bin/python3")
-        -- require("dap-python").setup("~/.local/bin/python3")
-
-        -- Auto open/close DAP UI
-        dap.listeners.after.event_initialized["dapui_config"] = function()
-            dapui.open()
-        end
-        dap.listeners.before.event_terminated["dapui_config"] = function()
-            dapui.close()
-        end
-        dap.listeners.before.event_exited["dapui_config"] = function()
-            dapui.close()
-        end
-
-        -- DAP signs/icons
-        vim.fn.sign_define('DapBreakpoint', {
-            text = '🔴',
-            texthl = 'DapBreakpoint',
-            linehl = 'DapBreakpoint',
-            numhl = 'DapBreakpoint'
-        })
-        vim.fn.sign_define('DapStopped', {
-            text = '▶️',
-            texthl = 'DapStopped',
-            linehl = 'DapStopped',
-            numhl = 'DapStopped'
-        })
-    end,
-},
-
--- github copilot
-{
-  "github/copilot.vim",
-  event = "InsertEnter",
-},
 
 
--- Auto-pairs plugin for better indentation and bracket handling
+    -- Error Lens - shows diagnostics inline like VS Code
+    {
+        "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+        config = function()
+            require("lsp_lines").setup()
+            -- Disable virtual_text since lsp_lines replaces it
+            vim.diagnostic.config({
+                virtual_text = false,
+            })
+        end,
+    },
+
+    -- Trouble.nvim for diagnostics panel (xx)
+    {
+        "folke/trouble.nvim",
+        opts = {}, -- for default options, refer to the configuration section for custom setup.
+        cmd = "Trouble",
+    },
+
+    -- Debug Adapter Protocol (DAP)
+    {
+        "mfussenegger/nvim-dap",
+        dependencies = {
+            -- Optional UI for better debugging experience
+            "rcarriga/nvim-dap-ui",
+            "nvim-neotest/nvim-nio",
+            -- Virtual text support
+            "theHamsta/nvim-dap-virtual-text",
+            -- Python debugger
+            "mfussenegger/nvim-dap-python",
+        },
+        config = function()
+            local dap = require("dap")
+            local dapui = require("dapui")
+
+            -- Setup DAP UI
+            dapui.setup()
+
+            -- Setup virtual text
+            require("nvim-dap-virtual-text").setup()
+
+            -- Python debugger setup - specify full path to Python
+            require("dap-python").setup("python3") -- Try python3 first
+            -- Alternative: specify full path if python3 doesn't work
+            -- require("dap-python").setup("/usr/bin/python3")
+            -- require("dap-python").setup("~/.local/bin/python3")
+
+            -- Auto open/close DAP UI
+            dap.listeners.after.event_initialized["dapui_config"] = function()
+                dapui.open()
+            end
+            dap.listeners.before.event_terminated["dapui_config"] = function()
+                dapui.close()
+            end
+            dap.listeners.before.event_exited["dapui_config"] = function()
+                dapui.close()
+            end
+
+            -- DAP signs/icons
+            vim.fn.sign_define('DapBreakpoint', {
+                text = '🔴',
+                texthl = 'DapBreakpoint',
+                linehl = 'DapBreakpoint',
+                numhl = 'DapBreakpoint'
+            })
+            vim.fn.sign_define('DapStopped', {
+                text = '▶️',
+                texthl = 'DapStopped',
+                linehl = 'DapStopped',
+                numhl = 'DapStopped'
+            })
+        end,
+    },
+
+    -- github copilot
+    {
+        "github/copilot.vim",
+    },
+
+
+    -- Auto-pairs plugin for better indentation and bracket handling
 {
   "windwp/nvim-autopairs",
   event = "InsertEnter",
@@ -252,9 +251,24 @@ require("lazy").setup({
       ts_config = {
         lua = {'string', 'source'},
         javascript = {'string', 'template_string'},
+        python = {'string', 'comment'},  -- Enhanced Python support
         java = false,
       },
       disable_filetype = { "TelescopePrompt", "vim" },
+      disable_in_macro = true,  -- Disable in macros
+      disable_in_visualblock = false,
+      disable_in_replace_mode = true,
+      ignored_next_char = [=[[%w%%%'%[%"%.%`%$]]=],
+      enable_moveright = true,
+      enable_afterquote = true,
+      enable_check_bracket_line = false,  -- Don't check bracket on same line
+      enable_bracket_in_quote = true,
+      enable_abbr = false,
+      break_undo = true,
+      map_cr = true,
+      map_bs = true,
+      map_c_h = false,
+      map_c_w = false,
       fast_wrap = {
         map = '<M-e>',
         chars = { '{', '[', '(', '"', "'" },
@@ -266,14 +280,112 @@ require("lazy").setup({
         highlight_grey='Comment'
       },
     })
+
     -- Integration with nvim-cmp
     local cmp_autopairs = require("nvim-autopairs.completion.cmp")
     local cmp = require("cmp")
     cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
+
+    -- Python-specific rules
+    local python_rule = Rule(":", "")
+      :with_pair(function(opts)
+        -- Only trigger in Python files
+        if vim.bo.filetype ~= 'python' then
+          return false
+        end
+        -- Don't add extra indentation after colons in certain contexts
+        local line = opts.line
+        if line:match("^%s*if%s") or line:match("^%s*for%s") or line:match("^%s*while%s") then
+          return false
+        end
+        return true
+      end)
+    autopairs.add_rules({python_rule})
   end,
 },
 
+
+--Ipynb support
+{
+  'Vigemus/iron.nvim',
+    ft = { 'ipynb' }, -- Load for Python and Jupyter Notebook files
+    config = function()
+        require('iron.core').setup({
+            config = {
+                -- Set the REPL command for Python
+                repl_open_cmd = "tabnew",
+                -- Set the REPL command for Jupyter Notebook
+                jupyter = {
+                    command = "jupyter console --simple-prompt",
+                },
+            },
+            -- Define key mappings for Iron
+            keymaps = {
+                send_motion = "<leader>sm",  -- Send motion to REPL
+                send_line = "<leader>sl",     -- Send line to REPL
+                send_file = "<leader>sf",     -- Send file to REPL
+                send_range = "<leader>sr",    -- Send range to REPL
+                send_marked = "<leader>smk",  -- Send marked text to REPL
+            },
+        })
+    end,
+},
+
+-- Iron.nvim for Jupyter notebook REPL
+{
+    "Vigemus/iron.nvim",
+    ft = "python", -- Only load for Python files
+    config = function()
+        local iron = require("iron.core")
+
+        iron.setup {
+            config = {
+                -- Whether a repl should be discarded or not
+                scratch_repl = true,
+                -- Your repl definitions come here
+                repl_definition = {
+                    python = {
+                        command = {"ipython"},
+                        format = require("iron.fts.common").bracketed_paste,
+                    }
+                },
+                -- How the repl window will be displayed
+                repl_open_cmd = require('iron.view').split.vertical.botright(50),
+            },
+            highlight = {
+                italic = true,
+            },
+            ignore_blank_lines = true, -- ignore blank lines when sending visual select lines
+        }
+    end
+},
+
+-- Better Jupyter notebook support with jupytext
+{
+    "GCBallesteros/jupytext.nvim",
+    config = function()
+        require("jupytext").setup({
+            style = "markdown", -- or "light", "percent"
+            output_extension = "md", -- Default extension. Don't change unless you know what you are doing
+            force_ft = nil, -- Default filetype. Don't change unless you know what you are doing
+            custom_language_formatting = {
+                python = {
+                    extension = "py",
+                    style = "percent",
+                    force_ft = "python"
+                },
+                r = {
+                    extension = "r",
+                    style = "percent",
+                    force_ft = "r"
+                }
+            }
+        })
+    end,
+},
+
 })
+
 
 
 
