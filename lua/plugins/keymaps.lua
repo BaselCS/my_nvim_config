@@ -99,33 +99,48 @@ vim.keymap.set("i", "<C-]>", "<Plug>(copilot-dismiss)")
 
 
 
--- REPL Management
-vim.keymap.set('n', '<leader>rs', '<cmd>IronRepl<cr>', { desc = "Start REPL" })
-vim.keymap.set('n', '<leader>rr', '<cmd>IronRestart<cr>', { desc = "Restart REPL" })
-vim.keymap.set('n', '<leader>rf', '<cmd>IronFocus<cr>', { desc = "Focus REPL window" })
-vim.keymap.set('n', '<leader>rh', '<cmd>IronHide<cr>', { desc = "Hide REPL window" })
+-- REPL Management (j==Jupyter-like)
+vim.keymap.set('n', '<leader>js', '<cmd>IronRepl<cr>', { desc = "Start REPL" })
+vim.keymap.set('n', '<leader>jr', '<cmd>IronRestart<cr>', { desc = "Restart REPL" })
+vim.keymap.set('n', '<leader>jh', '<cmd>IronHide<cr>', { desc = "Hide REPL window" })
 
--- Send code to REPL (like Jupyter cells)
-vim.keymap.set('n', '<leader>sc', '<cmd>lua require("iron.core").send_motion()<cr>', { desc = "Send motion to REPL" })
-vim.keymap.set('v', '<leader>sc', '<cmd>lua require("iron.core").visual_send()<cr>', { desc = "Send selection to REPL" })
-vim.keymap.set('n', '<leader>sl', '<cmd>lua require("iron.core").send_line()<cr>', { desc = "Send line to REPL" })
-vim.keymap.set('n', '<leader>sf', '<cmd>lua require("iron.core").send_file()<cr>', { desc = "Send file to REPL" })
+vim.keymap.set('n', '<leader>jc', '<cmd>lua require("iron.core").send_motion()<cr>', { desc = "Send motion to REPL" })
+vim.keymap.set('v', '<leader>jc', '<cmd>lua require("iron.core").visual_send()<cr>', { desc = "Send selection to REPL" })
+vim.keymap.set('n', '<leader>jl', '<cmd>lua require("iron.core").send_line()<cr>', { desc = "Send line to REPL" })
+vim.keymap.set('n', '<leader>jf', '<cmd>lua require("iron.core").send_file()<cr>', { desc = "Send file to REPL" })
+vim.keymap.set("n", "<leader>jd", '<cmd>lua require("iron.core").send("python", "%clear")<cr>', { desc = "delete REPL output" })
 
--- Jupyter-like cell execution (send paragraph/function)
-vim.keymap.set('n', '<leader>sp', 'vip<leader>sc', { desc = "Send paragraph to REPL", remap = true })
-vim.keymap.set('n', '<leader>sb', 'v}k<leader>sc', { desc = "Send block to REPL", remap = true })
 
--- REPL control
-vim.keymap.set('n', '<leader>s<cr>', '<cmd>lua require("iron.core").send_mark()<cr>', { desc = "Send mark to REPL" })
-vim.keymap.set('n', '<leader>s<space>', '<cmd>lua require("iron.core").send_interrupt()<cr>', { desc = "Interrupt REPL" })
-vim.keymap.set('n', '<leader>sq', '<cmd>lua require("iron.core").close_repl()<cr>', { desc = "Quit REPL" })
-vim.keymap.set('n', '<leader>cl', '<cmd>lua require("iron.core").send_mark()<cr>', { desc = "Clear REPL" })
+-- Search for cell then run it
+local function search_and_run_cell()
+  -- Search for cell marker
+  vim.fn.search("# %%", "b")  -- Search backwards for cell start
+  -- Move to next line (actual cell content)
+  vim.cmd("normal! j")
+  -- Select until next cell or end of file
+  vim.cmd("normal! V")
+  -- Search forward for next cell or go to end
+  local next_cell = vim.fn.search("# %%", "n")
+  if next_cell > 0 then
+    vim.fn.search("# %%")
+    vim.cmd("normal! k")  -- Go to line before next cell marker
+  else
+    vim.cmd("normal! G")  -- Go to end of file
+  end
+  -- Send selection to REPL
+  require("iron.core").visual_send()
+  -- Clear selection
+end
 
--- Quick send common commands
-vim.keymap.set('n', '<leader>si', function()
-    require("iron.core").send(nil, {"import numpy as np", "import pandas as pd", "import matplotlib.pyplot as plt"})
-end, { desc = "Send common imports" })
+vim.keymap.set('n', '<leader>jb', search_and_run_cell, { desc = "Search and run current cell" })
 
-vim.keymap.set('n', '<leader>sm', function()
-    require("iron.core").send(nil, {"%matplotlib inline"})
-end, { desc = "Enable matplotlib inline" })
+-- Keymap to clear IPython REPL
+vim.keymap.set('n', '<leader>jc', function()
+  require("iron.core").send(nil, {"clear"})
+end, { desc = "Clear IPython REPL" })
+
+local function insert_ipython_cell()
+  local line = vim.api.nvim_get_current_line()
+  vim.api.nvim_put({ line .. "# %%" }, "l", true, true)
+end
+vim.keymap.set("n", "<leader>C", insert_ipython_cell, { desc = "Insert IPython cell marker (# %%)" })

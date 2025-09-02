@@ -117,27 +117,6 @@
 | `<leader><F11>` | عادي | `require('dap-python').test_method()` | اختبار دالة Python |
 | `<leader><F12>` | عادي | `require('dap-python').test_class()` | اختبار فئة Python |
 
-# إدارة REPL (Iron.nvim)
-
-| الاختصار        | الوضع | الإجراء                                  | الوصف                        |
-| --------------- | ----- | ---------------------------------------- | ---------------------------- |
-| `<leader>rs`    | عادي  | `:IronRepl<CR>`                          | بدء REPL                     |
-| `<leader>rr`    | عادي  | `:IronRestart<CR>`                       | إعادة تشغيل REPL             |
-| `<leader>rf`    | عادي  | `:IronFocus<CR>`                         | التركيز على نافذة REPL       |
-| `<leader>rh`    | عادي  | `:IronHide<CR>`                          | إخفاء نافذة REPL             |
-| `<leader>sc`    | عادي  | `require("iron.core").send_motion()`     | إرسال حركة إلى REPL          |
-| `<leader>sc`    | مرئي  | `require("iron.core").visual_send()`     | إرسال تحديد إلى REPL         |
-| `<leader>sl`    | عادي  | `require("iron.core").send_line()`       | إرسال السطر الحالي إلى REPL  |
-| `<leader>sf`    | عادي  | `require("iron.core").send_file()`       | إرسال الملف إلى REPL         |
-| `<leader>sp`    | عادي  | `vip<leader>sc` (معاد التوجيه)           | إرسال الفقرة إلى REPL        |
-| `<leader>sb`    | عادي  | `v}k<leader>sc` (معاد التوجيه)           | إرسال الكتلة/الدالة إلى REPL |
-| `<leader>s<CR>` | عادي  | `require("iron.core").send_mark()`       | إرسال العلامة إلى REPL       |
-| `<leader>s␣`    | عادي  | `require("iron.core").send_interrupt()`  | مقاطعة REPL                  |
-| `<leader>sq`    | عادي  | `require("iron.core").close_repl()`      | إنهاء REPL                   |
-| `<leader>cl`    | عادي  | `require("iron.core").send_mark()`       | مسح REPL (يعتمد على التهيئة) |
-| `<leader>si`    | عادي  | إرسال `import numpy, pandas, matplotlib` | أوامر استيراد شائعة          |
-| `<leader>sm`    | عادي  | إرسال `%matplotlib inline`               | تفعيل الرسم داخل REPL        |
-
 ## الأوامر المخصصة
 
 | الأمر | الوصف |

@@ -67,7 +67,7 @@ require("lazy").setup({
         build = ":TSUpdate",
         config = function()
             require("nvim-treesitter.configs").setup({
-                ensure_installed = { "lua", "cpp", "python","markdown", "markdown_inline",},
+                ensure_installed = { "lua", "markdown", "markdown_inline",},
                 highlight = {
                     enable = true,
                 },
@@ -238,13 +238,12 @@ require("lazy").setup({
     },
 
 
-    -- Auto-pairs plugin for better indentation and bracket handling
+-- Auto-pairs plugin for better indentation and bracket handling
 {
   "windwp/nvim-autopairs",
   event = "InsertEnter",
   config = function()
     local autopairs = require("nvim-autopairs")
-    local Rule = require("nvim-autopairs.rule")
 
     autopairs.setup({
       check_ts = true,  -- Enable treesitter
@@ -286,107 +285,62 @@ require("lazy").setup({
     local cmp = require("cmp")
     cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
 
-    -- Python-specific rules
-    local python_rule = Rule(":", "")
-      :with_pair(function(opts)
-        -- Only trigger in Python files
-        if vim.bo.filetype ~= 'python' then
-          return false
-        end
-        -- Don't add extra indentation after colons in certain contexts
-        local line = opts.line
-        if line:match("^%s*if%s") or line:match("^%s*for%s") or line:match("^%s*while%s") then
-          return false
-        end
-        return true
-      end)
-    autopairs.add_rules({python_rule})
   end,
 },
 
 
---Ipynb support
-{
-  'Vigemus/iron.nvim',
-    ft = { 'ipynb' }, -- Load for Python and Jupyter Notebook files
-    config = function()
-        require('iron.core').setup({
-            config = {
-                -- Set the REPL command for Python
-                repl_open_cmd = "tabnew",
-                -- Set the REPL command for Jupyter Notebook
-                jupyter = {
-                    command = "jupyter console --simple-prompt",
-                },
-            },
-            -- Define key mappings for Iron
-            keymaps = {
-                send_motion = "<leader>sm",  -- Send motion to REPL
-                send_line = "<leader>sl",     -- Send line to REPL
-                send_file = "<leader>sf",     -- Send file to REPL
-                send_range = "<leader>sr",    -- Send range to REPL
-                send_marked = "<leader>smk",  -- Send marked text to REPL
-            },
-        })
-    end,
-},
 
 -- Iron.nvim for Jupyter notebook REPL
 {
     "Vigemus/iron.nvim",
     ft = "python", -- Only load for Python files
     config = function()
+      
         local iron = require("iron.core")
 
         iron.setup {
             config = {
-                -- Whether a repl should be discarded or not
                 scratch_repl = true,
-                -- Your repl definitions come here
                 repl_definition = {
                     python = {
-                        command = {"ipython"},
+                        command = {"ipython"}, -- Using IPython for enhanced features
                         format = require("iron.fts.common").bracketed_paste,
+                        cell = { left = "# %%", right = "" },
+                        block = { left = "", right = "" },  -- Relies on indentation
                     }
                 },
-                -- How the repl window will be displayed
                 repl_open_cmd = require('iron.view').split.vertical.botright(50),
             },
-            highlight = {
-                italic = true,
-            },
-            ignore_blank_lines = true, -- ignore blank lines when sending visual select lines
+            ignore_blank_lines = true,
         }
     end
 },
-
--- Better Jupyter notebook support with jupytext
+-- Indentation blankline plugin
 {
-    "GCBallesteros/jupytext.nvim",
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    ---@module "ibl"
+    ---@type ibl.config
+    opts = {},
     config = function()
-        require("jupytext").setup({
-            style = "markdown", -- or "light", "percent"
-            output_extension = "md", -- Default extension. Don't change unless you know what you are doing
-            force_ft = nil, -- Default filetype. Don't change unless you know what you are doing
-            custom_language_formatting = {
-                python = {
-                    extension = "py",
-                    style = "percent",
-                    force_ft = "python"
-                },
-                r = {
-                    extension = "r",
-                    style = "percent",
-                    force_ft = "r"
-                }
-            }
+        require("ibl").setup({
+            scope = {
+                char = "|",  -- Optional: Different character for scope lines
+            },
         })
     end,
 },
+-- Vim BE Good game for learning vim
+{
+    {
+        "ThePrimeagen/vim-be-good",
+        -- Optional: Specify keys or events to lazy-load the plugin
+        -- event = "VimEnter",  -- Load when Neovim starts
+        -- cmd = "VimBeGood",   -- Load when the command is called
+    }
+},
+
 
 })
-
-
-
 
 

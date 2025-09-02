@@ -1,5 +1,6 @@
 -- keymaps for vim
 vim.g.mapleader = " "
+
 -- stop Space from working in n and v
 vim.api.nvim_set_keymap('', '<Space>', '<Nop>', { noremap = true, silent = true })
 
