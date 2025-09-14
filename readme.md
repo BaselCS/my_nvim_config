@@ -113,9 +113,25 @@
 |---------|------|--------|-------|
 | `<leader>ce` | عادي | `:Copilot enable<CR>` | تفعيل Copilot |
 | `<leader>cd` | عادي | `:Copilot disable<CR>` | تعطيل Copilot |
-| `<leader>cl` | عادي | `:Copilot logout<CR>` | سجل Copilot |
-| `<leader><F11>` | عادي | `require('dap-python').test_method()` | اختبار دالة Python |
-| `<leader><F12>` | عادي | `require('dap-python').test_class()` | اختبار فئة Python |
+| `<leader>cl` | عادي | `:Copilot log<CR>` | سجل Copilot |
+| `<C-l>` | إدراج | `copilot#Accept("<CR>")` | قبول اقتراح Copilot |
+| `<C-]>` | إدراج | `<Plug>(copilot-dismiss)` | رفض اقتراح Copilot |
+
+## REPL/Jupyter (Iron.nvim)
+
+| الاختصار | الوضع | الإجراء | الوصف |
+|---------|------|--------|-------|
+| `<leader>js` | عادي | `IronRepl` | بدء REPL |
+| `<leader>jr` | عادي | `IronRestart` | إعادة تشغيل REPL |
+| `<leader>jh` | عادي | `IronHide` | إخفاء نافذة REPL |
+| `<leader>jc` | عادي | `iron.core.send_motion()` | إرسال الحركة إلى REPL |
+| `<leader>jc` | مرئي | `iron.core.visual_send()` | إرسال التحديد إلى REPL |
+| `<leader>jl` | عادي | `iron.core.send_line()` | إرسال السطر الحالي إلى REPL |
+| `<leader>jf` | عادي | `iron.core.send_file()` | إرسال الملف الحالي إلى REPL |
+| `<leader>jd` | عادي | `iron.core.send("%clear")` | مسح مخرجات REPL |
+| `<leader>jb` | عادي | `search_and_run_cell()` | البحث وتشغيل الخلية الحالية |
+| `<leader>jc` | عادي | `iron.core.send("clear")` | مسح IPython REPL |
+| `<leader>C` | عادي | `insert_ipython_cell()` | إدراج علامة خلية IPython (`# %%`) |
 
 ## الأوامر المخصصة
 
