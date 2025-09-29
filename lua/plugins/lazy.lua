@@ -295,7 +295,7 @@ require("lazy").setup({
     "Vigemus/iron.nvim",
     ft = "python", -- Only load for Python files
     config = function()
-      
+
         local iron = require("iron.core")
 
         iron.setup {
@@ -340,6 +340,78 @@ require("lazy").setup({
     }
 },
 
+
+
+-- langmapper for Arabic support (مُصحح)
+{
+    "Wansmer/langmapper.nvim",
+    lazy = false,
+    priority = 1,
+    config = function()
+        local langmapper = require("langmapper")
+
+        langmapper.setup({
+            -- Arabic to English mapping
+            default_layout = {
+                [1] = {
+                    id = "ar",
+                    layout = "ضصثقفغعهخحجدشسيبلاتنمكطئءؤرلاىةوزظ",
+                    default_layout = "qwertyuiopasdfghjklzxcvbnm"
+                }
+            },
+            use_default_mappings = true,
+            -- Apply to Normal, Visual, and Operator-pending modes only
+            default_mode = { "n", "v", "o" },
+            automapping = true,
+        })
+
+        -- Success message
+        vim.notify("✅ langmapper loaded successfully!", vim.log.levels.INFO)
+
+        -- Create command to check status (FIXED)
+        vim.api.nvim_create_user_command("LangmapperStatus", function()
+            print("🔄 Langmapper Status:")
+            print("  - Plugin loaded: ✅")
+            print("  - Default layout: Arabic")
+            print("  - Active modes: n, v, o")
+
+            -- Test if langmapper is working by checking if mappings exist
+            local has_mappings = false
+            local test_key = "ض" -- Arabic letter Dhad
+
+            -- Check if there's a mapping for the test key
+            local mappings = vim.api.nvim_get_keymap("n")
+            for _, mapping in ipairs(mappings) do
+                if mapping.lhs == test_key then
+                    has_mappings = true
+                    print("  - Test mapping (ض found): ✅")
+                    break
+                end
+            end
+
+            if not has_mappings then
+                print("  - Test mapping: ❌ (No Arabic mappings detected)")
+                print("  - Try: :lua require('langmapper').automapping()")
+            end
+
+            -- Show langmapper info if available
+            pcall(function()
+                local info = langmapper.get_layout_info and langmapper.get_layout_info() or "Info not available"
+                print("  - Layout info: " .. tostring(info))
+            end)
+
+        end, { desc = "Check langmapper status" })
+
+        -- Force apply mappings after setup
+        vim.defer_fn(function()
+            pcall(function()
+                langmapper.automapping()
+                vim.notify("🔄 Arabic mappings applied", vim.log.levels.INFO)
+            end)
+        end, 100)
+
+    end,
+},
 
 })
 
