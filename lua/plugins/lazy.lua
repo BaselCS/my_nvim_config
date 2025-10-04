@@ -293,28 +293,38 @@ require("lazy").setup({
 -- Iron.nvim for Jupyter notebook REPL
 {
     "Vigemus/iron.nvim",
-    ft = "python", -- Only load for Python files
+    ft = "python",
     config = function()
-      
         local iron = require("iron.core")
+
+        -- Decide whether to use ipython or python via uv
+        local repl_cmd = {"uv", "run", "ipython"}
+        if vim.fn.executable("ipython") ~= 1 then
+            -- fallback if ipython not installed inside uv
+            repl_cmd = {"uv", "run", "python"}
+        end
 
         iron.setup {
             config = {
                 scratch_repl = true,
                 repl_definition = {
                     python = {
-                        command = {"ipython"}, -- Using IPython for enhanced features
+                        command = repl_cmd,
                         format = require("iron.fts.common").bracketed_paste,
                         cell = { left = "# %%", right = "" },
-                        block = { left = "", right = "" },  -- Relies on indentation
+                        block = { left = "", right = "" },
                     }
                 },
-                repl_open_cmd = require('iron.view').split.vertical.botright(50),
+                repl_open_cmd = require("iron.view").split.vertical.botright(50),
             },
             ignore_blank_lines = true,
         }
     end
 },
+
+
+
+
 -- Indentation blankline plugin
 {
     "lukas-reineke/indent-blankline.nvim",
