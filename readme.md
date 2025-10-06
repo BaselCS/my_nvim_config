@@ -107,7 +107,7 @@
 | `<leader><F11>` | عادي | `require('dap-python').test_method()` | اختبار الدالة الحالية |
 | `<leader><F12>` | عادي | `require('dap-python').test_class()` | اختبار الفئة الحالية |
 
-## GitHub Copilot
+## GitHub Copilot - مساعد الذكاء الاصطناعي للبرمجة
 
 | الاختصار | الوضع | الإجراء | الوصف |
 |---------|------|--------|-------|
