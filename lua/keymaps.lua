@@ -1,7 +1,7 @@
 -- keymaps for vim
 vim.g.mapleader = " "
 
--- stop Space from working in n and v
+-- stop Space from working in n and v modes
 vim.api.nvim_set_keymap('', '<Space>', '<Nop>', { noremap = true, silent = true })
 
 -- Paste in visual mode without yanking replaced text
@@ -150,7 +150,7 @@ end, { noremap = true, silent = true, desc = "Run Python file with uv (always)" 
 -- Additional uv-specific keymaps
 vim.keymap.set('n', '<leader>ui', ':terminal uv init<CR>', { noremap = true, silent = true, desc = "Initialize uv project" })
 vim.keymap.set('n', '<leader>ua', ':terminal uv add ', { noremap = true, desc = "Add package with uv" })
-vim.keymap.set('n', '<leader>ur', ':terminal uv remove ', { noremap = true, desc = "Remove packagewith uv" })
+vim.keymap.set('n', '<leader>ur', ':terminal uv remove ', { noremap = true, desc = "Remove package with uv" })
 vim.keymap.set('n', '<leader>us', ':terminal uv sync<CR>', { noremap = true, silent = true, desc = "Sync uv project" })
 vim.keymap.set('n', '<leader>ul', ':terminal uv lock<CR>', { noremap = true, silent = true, desc = "Update uv lock file" })
 vim.keymap.set('n', '<leader>uc', ':terminal uv run python<CR>', { noremap = true, silent = true, desc = "Open uv Python REPL" })
