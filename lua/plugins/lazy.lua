@@ -177,62 +177,118 @@ require("lazy").setup({
         cmd = "Trouble",
     },
 
-    -- Debug Adapter Protocol (DAP)
-    {
-        "mfussenegger/nvim-dap",
-        dependencies = {
-            -- Optional UI for better debugging experience
-            "rcarriga/nvim-dap-ui",
-            "nvim-neotest/nvim-nio",
-            -- Virtual text support
-            "theHamsta/nvim-dap-virtual-text",
-            -- Python debugger
-            "mfussenegger/nvim-dap-python",
-        },
-        config = function()
-            local dap = require("dap")
-            local dapui = require("dapui")
-
-            -- Setup DAP UI
-            dapui.setup()
-
-            -- Setup virtual text
-            require("nvim-dap-virtual-text").setup()
-
-            -- Python debugger setup - specify full path to Python
-            require("dap-python").setup("python3") -- Try python3 first
-            -- Alternative: specify full path if python3 doesn't work
-            -- require("dap-python").setup("/usr/bin/python3")
-            -- require("dap-python").setup("~/.local/bin/python3")
-
-            -- Auto open/close DAP UI
-            dap.listeners.after.event_initialized["dapui_config"] = function()
-                dapui.open()
-            end
-            dap.listeners.before.event_terminated["dapui_config"] = function()
-                dapui.close()
-            end
-            dap.listeners.before.event_exited["dapui_config"] = function()
-                dapui.close()
-            end
-
-            -- DAP signs/icons
-            vim.fn.sign_define('DapBreakpoint', {
-                text = '🔴',
-                texthl = 'DapBreakpoint',
-                linehl = 'DapBreakpoint',
-                numhl = 'DapBreakpoint'
-            })
-            vim.fn.sign_define('DapStopped', {
-                text = '▶️',
-                texthl = 'DapStopped',
-                linehl = 'DapStopped',
-                numhl = 'DapStopped'
-            })
-        end,
+-- Debug Adapter Protocol (DAP)
+{
+    "mfussenegger/nvim-dap",
+    dependencies = {
+        -- Optional UI for better debugging experience
+        "rcarriga/nvim-dap-ui",
+        "nvim-neotest/nvim-nio",
+        -- Virtual text support
+        "theHamsta/nvim-dap-virtual-text",
     },
+    config = function()
+        local dap = require("dap")
+        local dapui = require("dapui")
 
-    -- github copilot
+        -- Setup DAP UI
+        dapui.setup()
+
+        -- Setup virtual text
+        require("nvim-dap-virtual-text").setup()
+
+        -- Python debugger setup - use debugpy directly
+        -- This avoids the Lua rocks dependency issue
+        local function setup_python_debugger()
+            -- Try to use debugpy from uv project first
+            local current_dir = vim.fn.getcwd()
+            local pyproject_path = current_dir .. "/pyproject.toml"
+            local uv_lock_path = current_dir .. "/.uv.lock"
+
+            local python_path = "python3"
+
+            -- If in uv project, use uv's python
+            if vim.fn.filereadable(pyproject_path) == 1 or vim.fn.filereadable(uv_lock_path) == 1 then
+                if vim.fn.executable("uv") == 1 then
+                    python_path = "uv"
+                    dap.configurations.python = {
+                        {
+                            type = 'python',
+                            request = 'launch',
+                            name = 'Launch file (uv)',
+                            program = '${file}',
+                            pythonPath = function()
+                                return "python3" -- uv run python3
+                            end,
+                            args = {},
+                            justMyCode = false,
+                            console = "integratedTerminal",
+                        },
+                    }
+                    return
+                end
+            end
+
+            -- Standard Python configuration
+            dap.configurations.python = {
+                {
+                    type = 'python',
+                    request = 'launch',
+                    name = 'Launch file',
+                    program = '${file}',
+                    pythonPath = function()
+                        return python_path
+                    end,
+                    args = {},
+                    justMyCode = false,
+                    console = "integratedTerminal",
+                },
+                {
+                    type = 'python',
+                    request = 'launch',
+                    name = 'Launch file (with arguments)',
+                    program = '${file}',
+                    pythonPath = function()
+                        return python_path
+                    end,
+                    args = function()
+                        local args_str = vim.fn.input("Arguments: ")
+                        return vim.split(args_str, " ")
+                    end,
+                    justMyCode = false,
+                    console = "integratedTerminal",
+                },
+            }
+        end
+
+        setup_python_debugger()
+
+        -- Auto open/close DAP UI
+        dap.listeners.after.event_initialized["dapui_config"] = function()
+            dapui.open()
+        end
+        dap.listeners.before.event_terminated["dapui_config"] = function()
+            dapui.close()
+        end
+        dap.listeners.before.event_exited["dapui_config"] = function()
+            dapui.close()
+        end
+
+        -- DAP signs/icons
+        vim.fn.sign_define('DapBreakpoint', {
+            text = '🔴',
+            texthl = 'DapBreakpoint',
+            linehl = 'DapBreakpoint',
+            numhl = 'DapBreakpoint'
+        })
+        vim.fn.sign_define('DapStopped', {
+            text = '▶️',
+            texthl = 'DapStopped',
+            linehl = 'DapStopped',
+            numhl = 'DapStopped'
+        })
+    end,
+},    -- github copilot
     {
         "github/copilot.vim",
     },
@@ -289,7 +345,6 @@ require("lazy").setup({
 },
 
 
-
 -- Iron.nvim for Jupyter notebook REPL
 {
     "Vigemus/iron.nvim",
@@ -298,15 +353,49 @@ require("lazy").setup({
 
         local iron = require("iron.core")
 
+        -- Helper function to get python executable path
+        local function get_python_cmd()
+            -- Check if in uv project first
+            local current_dir = vim.fn.getcwd()
+            local pyproject_path = current_dir .. "/pyproject.toml"
+            local uv_lock_path = current_dir .. "/.uv.lock"
+
+            if vim.fn.filereadable(pyproject_path) == 1 or vim.fn.filereadable(uv_lock_path) == 1 then
+                -- Try to use uv's python
+                if vim.fn.executable("uv") == 1 then
+                    return { "uv", "run", "python", "-i" }
+                end
+            end
+
+            -- Try ipython first
+            if vim.fn.executable("ipython") == 1 then
+                return { "ipython" }
+            end
+
+            -- Fall back to python3
+            if vim.fn.executable("python3") == 1 then
+                return { "python3", "-i" }
+            end
+
+            -- Last resort: python
+            if vim.fn.executable("python") == 1 then
+                return { "python", "-i" }
+            end
+
+            -- If nothing found, notify user
+            vim.notify("No Python executable found. Install Python or IPython.", vim.log.levels.ERROR)
+            return { "python3" } -- Fallback that will error
+        end
+
         iron.setup {
             config = {
                 scratch_repl = true,
                 repl_definition = {
                     python = {
-                        command = {"ipython"}, -- Using IPython for enhanced features
+                        command = get_python_cmd(),
                         format = require("iron.fts.common").bracketed_paste,
                         cell = { left = "# %%", right = "" },
-                        block = { left = "", right = "" },  -- Relies on indentation
+                        block = { left = "", right = "" },
                     }
                 },
                 repl_open_cmd = require('iron.view').split.vertical.botright(50),

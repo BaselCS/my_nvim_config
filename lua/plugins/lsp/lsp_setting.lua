@@ -57,48 +57,34 @@ local function setup_pyright()
         end
     end
 
-    lspconfig.pyright.setup({
+    -- Use new vim.lsp.config API for Neovim 0.11+
+    vim.lsp.config("pyright", {
+        cmd = { "pyright-langserver", "--stdio" },
         on_attach = on_attach,
         settings = settings,
-        root_dir = function(fname)
-            -- First, try to find uv project markers
-            local uv_root = lspconfig.util.root_pattern("pyproject.toml", ".uv.lock")(fname)
-            if uv_root then
-                return uv_root
-            end
-
-            -- Fall back to standard Python project markers
-            return lspconfig.util.root_pattern(
-                "setup.py",
-                "setup.cfg",
-                "requirements.txt",
-                "Pipfile",
-                ".git"
-            )(fname) or lspconfig.util.path.dirname(fname)
-        end,
+        root_markers = { "pyproject.toml", ".uv.lock", "setup.py", "setup.cfg", "requirements.txt", "Pipfile", ".git" },
     })
+    vim.lsp.enable("pyright")
 end
 
 -- Setup Pyright
 setup_pyright()
 
--- Lua LSP
-lspconfig.lua_ls.setup({
+-- Lua LSP using new API
+vim.lsp.config("lua_ls", {
+  cmd = { "lua-language-server" },
   on_attach = on_attach,
   settings = {
     Lua = {
       runtime = {
-        -- Tell the language server which version of Lua you're using
         version = 'LuaJIT',
       },
       diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = {'vim'},
+        globals = { 'vim' },
       },
       workspace = {
-        -- Make the server aware of Neovim runtime files
         library = vim.api.nvim_get_runtime_file("", true),
-        checkThirdParty = false, -- Disable third-party checking
+        checkThirdParty = false,
       },
       telemetry = {
         enable = false,
@@ -106,13 +92,12 @@ lspconfig.lua_ls.setup({
     },
   },
 })
+vim.lsp.enable("lua_ls")
 
 -- Auto-command to refresh LSP when entering a new directory
 vim.api.nvim_create_autocmd({"DirChanged"}, {
     callback = function()
-        -- Small delay to ensure the directory change is complete
         vim.defer_fn(function()
-            -- Restart LSP clients for Python files
             for _, client in pairs(vim.lsp.get_active_clients()) do
                 if client.name == "pyright" then
                     vim.cmd("LspRestart pyright")
