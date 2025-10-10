@@ -90,22 +90,22 @@
 | الاختصار | الوضع | الإجراء | الوصف |
 |---------|------|--------|-------|
 | `<leader>d` | عادي | `DapToggleBreakpoint` | تبديل نقطة التوقف |
-| `<leader><F1>` | عادي | `DapContinue` | متابعة التصحيح |
-| `<leader><F2>` | عادي | `DapStepInto` | الدخول خطوة |
-| `<leader><F3>` | عادي | `DapStepOver` | تخطي خطوة |
-| `<leader><F4>` | عادي | `DapStepOut` | الخروج من خطوة |
-| `<leader><F6>` | عادي | `DapRestart` | إعادة تشغيل التصحيح |
-| `<leader><F7>` | عادي | `DapShowLog` | إظهار سجل التصحيح |
-| `<leader><F8>` | عادي | `DapTerminate` | إنهاء التصحيح |
-| `<leader><F9>` | عادي | `require('dapui').toggle()` | تبديل واجهة التصحيح |
-| `<leader><F10>` | عادي | `require('dapui').eval()` | تقييم التعبير |
+| `<F1>` | عادي | `DapContinue` | متابعة التصحيح |
+| `<F2>` | عادي | `DapStepInto` | الدخول خطوة |
+| `<F3>` | عادي | `DapStepOver` | تخطي خطوة |
+| `<F4>` | عادي | `DapStepOut` | الخروج من خطوة |
+| `<F6>` | عادي | `DapRestart` | إعادة تشغيل التصحيح |
+| `<F7>` | عادي | `DapShowLog` | إظهار سجل التصحيح |
+| `<F8>` | عادي | `DapTerminate` | إنهاء التصحيح |
+| `<F9>` | عادي | `require('dapui').toggle()` | تبديل واجهة التصحيح |
+| `<F10>` | عادي | `require('dapui').eval()` | تقييم التعبير |
 
 ## DAP - التصحيح الخاص بـ Python
 
 | الاختصار | الوضع | الإجراء | الوصف |
 |---------|------|--------|-------|
-| `<leader><F11>` | عادي | `require('dap-python').test_method()` | اختبار الدالة الحالية |
-| `<leader><F12>` | عادي | `require('dap-python').test_class()` | اختبار الفئة الحالية |
+| `<F11>` | عادي | `require('dap-python').test_method()` | اختبار الدالة الحالية |
+| `<F12>` | عادي | `require('dap-python').test_class()` | اختبار الفئة الحالية |
 
 ## GitHub Copilot - مساعد الذكاء الاصطناعي للبرمجة
 
@@ -128,10 +128,15 @@
 | `<leader>jc` | مرئي | `iron.core.visual_send()` | إرسال التحديد إلى REPL |
 | `<leader>jl` | عادي | `iron.core.send_line()` | إرسال السطر الحالي إلى REPL |
 | `<leader>jf` | عادي | `iron.core.send_file()` | إرسال الملف الحالي إلى REPL |
-| `<leader>jd` | عادي | `iron.core.send("%clear")` | مسح مخرجات REPL |
+| `<leader>jd` | عادي | `iron.core.send("%clear")` | مسح مخرجات REPL (Python) |
 | `<leader>jb` | عادي | `search_and_run_cell()` | البحث وتشغيل الخلية الحالية |
-| `<leader>jc` | عادي | `iron.core.send("clear")` | مسح IPython REPL |
+| `<leader>jp` | عادي | `convert_py_to_ipynb()` | تحويل ملف Python الحالي إلى .ipynb |
 | `<leader>C` | عادي | `insert_ipython_cell()` | إدراج علامة خلية IPython (`# %%`) |
+
+### ملاحظة حول `<leader>jc`:
+- في الوضع العادي: إرسال الحركة إلى REPL
+- في الوضع المرئي: إرسال التحديد إلى REPL
+- يوجد أيضاً دالة منفصلة لمسح IPython REPL
 
 ## الأوامر المخصصة
 

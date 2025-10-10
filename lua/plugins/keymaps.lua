@@ -110,6 +110,31 @@ vim.keymap.set('n', '<leader>jl', '<cmd>lua require("iron.core").send_line()<cr>
 vim.keymap.set('n', '<leader>jf', '<cmd>lua require("iron.core").send_file()<cr>', { desc = "Send file to REPL" })
 vim.keymap.set("n", "<leader>jd", '<cmd>lua require("iron.core").send("python", "%clear")<cr>', { desc = "delete REPL output" })
 
+-- Convert current Python file to Jupyter Notebook (.ipynb)
+vim.keymap.set("n", "<leader>jp", function()
+  -- Save current file
+  vim.cmd("write")
+
+  -- Get the absolute path of the current file
+local file_path = vim.fn.expand("%:t")  -- just the filename
+  -- Get Neovim config directory (where py_to_ipynb.py is)
+  local config_path = vim.fn.stdpath("config")
+
+  -- Build the command to run the converter on the current file
+local cmd = string.format("%s/py_to_ipynb.py %s", config_path, file_path)
+
+  -- Execute the command
+  local result = vim.fn.system(cmd)
+
+  -- Notify user whether it worked
+  if vim.v.shell_error == 0 then
+    vim.notify("✅ Converted " .. vim.fn.expand("%:t") .. " → .ipynb", vim.log.levels.INFO)
+  else
+    vim.notify("❌ Conversion failed:\n" .. result, vim.log.levels.ERROR)
+  end
+end, { desc = "Convert current Python file to .ipynb" })
+
+
 
 -- Search for cell then run it
 local function search_and_run_cell()
@@ -144,3 +169,5 @@ local function insert_ipython_cell()
   vim.api.nvim_put({ line .. "# %%" }, "l", true, true)
 end
 vim.keymap.set("n", "<leader>C", insert_ipython_cell, { desc = "Insert IPython cell marker (# %%)" })
+
+
